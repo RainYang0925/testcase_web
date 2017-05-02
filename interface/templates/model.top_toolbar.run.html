@@ -1,0 +1,40 @@
+{% load i18n %}
+<div class="btn-group run">
+  <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">
+    <i class="fa fa-play"></i> {% trans "运行" %} <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+    {% for et in run_types %}
+      <script type="text/javascript">
+            function validate(){document.getElementById('changelist-form').submit();}
+      </script>
+      <li><a data-toggle="modal" data-target="" onclick="validate()"><i class="fa fa-play-circle"></i>  {{et.name}}</a></li>
+    {% endfor %}
+  </ul>
+  {% for et in run_types %}
+    <div id="run-modal-{{et.type}}" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{{et.name}}</h4>
+          </div>
+          <div class="modal-body">
+            {% for run_object in runs_objects %}
+            <ul class="model_ul">
+             {{ run_object}}
+            </ul>
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn fa-stop" data-dismiss="modal">{% trans "停止" %}</button>
+            <button class="btn btn-success" type="button" onclick = "" ><i class="fa fa-play"></i> {% trans "运行" %}</button>
+          </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+  {% endfor %}
+
+</div>

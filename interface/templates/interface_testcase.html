@@ -1,0 +1,132 @@
+<html lang="zh-CN">
+
+ <head>
+     <script type="text/javascript" src="http://cdnjs.gtimg.com/cdnjs/libs/jquery/2.1.0/jquery.min.js"></script>
+  {# Load the tag library #}
+  {% load bootstrap3 %}
+
+  {# Load CSS and JavaScript #}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+  {# Display django.contrib.messages as Bootstrap alerts #}
+  {% bootstrap_messages %}
+
+ </head>
+ <body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+   <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/admin/">自动化测试用例</a>
+        <div class="navbar-mod">
+            <a class="navbar-brand" href="/android/">Android</a>
+            <a class="navbar-brand" href="/h5/">H5</a>
+            <a class="navbar-brand" href="/pc/">PC</a>
+            <a class="navbar-brand" href="/interface/">接口</a>
+        </div>
+    </div>
+   </div>
+  </nav>
+  <br>
+  <br>
+  <div class="well">
+    <h2>接口测试数据</h2>
+  <form method="get" action="/interface/" id="sub">
+    <select name = 'table' id="select_list">
+    {% for table_list1 in table_list %}
+        {% if table == table_list1.table %}
+            <option  value ="{{table_list1.table}}" selected="selected">{{table_list1.name}}</option>
+        {% else %}
+            <option  value ="{{table_list1.table}}">{{table_list1.name}}</option>
+        {% endif %}
+    {% endfor %}
+    </select>
+  <div class="text">
+        <a href="javascript:void(0)" onclick="Jenkins()">Go Jenkins</a>
+  </div>
+  </form>
+    <table class='table' id="tab">
+        <th width="250">Name</th>
+        <th>Url</th>
+        <th>Request</th>
+        <th>Parameters</th>
+        <th>Body</th>
+        <th>Response</th>
+        <th>Code</th>
+        <th>Expected</th>
+        <th>Actual</th>
+        <th>Restult</th>
+        <th>Time</th>
+        <th width="70">Datetime</th>
+        {% for testcase in testcase_list  %}
+            <tr>{% for k in testcase  %}
+                    <td><div class="sty active">{{ k }}</div></td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+  </div>
+  <div class="pagination">
+      <span class="step-links">
+       {% if testcase_list.has_previous %}
+         <a href="?page={{ testcase_list.previous_page_number }}&table={{ table }}">previous</a>
+       {% endif %}
+         <span class="current">
+             Page {{ testcase_list.number }} of {{ testcase_list.paginator.num_pages }}.
+         </span>
+       {% if testcase_list.has_next %}
+         <a href="?page={{ testcase_list.next_page_number }}&table={{ table }}">next</a>
+       {% endif %}
+      </span>
+    </div>
+    <style>
+        .table div { word-break:break-all; word-wrap:break-word; cursor:pointer; }
+        .table tr td:nth-child(2) div { word-break:normal; word-wrap:normal; cursor:pointer; }
+        .sty.active { height:20px; overflow:hidden; }
+        .container { margin-left:0px; }
+        .navbar-mod { float:right; }
+        .navbar-header { width:100%; }
+        .container { width:100%; }
+        .text {float:right;}
+    </style>
+
+    <script type="text/javascript">
+        $('.table tr').click(function(){
+            if($(this).find('.sty').hasClass('active')) {
+                $(this).find('.sty').removeClass('active');
+            } else {
+                $(this).find('.sty').addClass('active');
+            }
+        });
+
+        $('#sub').change(function(){
+            $(this).submit();
+        });
+
+        var tableId = document.getElementById("tab");
+        for(var i=1;i<tableId.rows.length;i++)
+        {
+            var cell = tableId.rows[i].cells[1].innerHTML;
+            var str = '';
+            if(cell.indexOf('${api}') >=0){
+               str = 'https://api.qschou.com/v6';
+            } else {str = 'http://test.api.qschou.com/v6';}
+            tableId.rows[i].cells[1].innerHTML = tableId.rows[i].cells[1].innerHTML.replace(/\$\{api\}/,str);
+{#            tableId.rows[i].cells[10].innerHTML = tableId.rows[i].cells[10].innerHTML + 'ms';#}
+        }
+
+        function Jenkins() {
+            var select=document.getElementById("select_list");
+            var index=select.selectedIndex ;
+            var selected_text = select.options[index].text;
+            window.open("http://172.16.10.83/view/接口自动化测试/job/interface-" + selected_text);
+        }
+
+    </script>
+
+    <footer>
+        <p align="center">&copy;Test Automation 2016 & Zhangzhiyuan</p>
+    </footer>
+ </body>
+</html>

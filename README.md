@@ -19,7 +19,7 @@ python 2.7 + Django 1.9.7 + xadmin 0.6.1 + MySql 5.7
 * [xadmin]-Django后台管理页面升级版，界面展示美观，可自定义插件，功能可扩展
 
 ## 截图
-![](http://oolpysber.bkt.clouddn.com/WX20170418-182035.png)
+![](https://cl.ly/k3wX/WX20170418-182035.png)
 
 
 [Django]:<https://github.com/django/django.git>
